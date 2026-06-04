@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Chex Alifbosi</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #0C0D10;
+  --bg2:      #13141A;
+  --bg3:      #1A1B23;
+  --card:     #1E1F28;
+  --card2:    #252733;
+  --green:    #34D88C;
+  --green2:   rgba(52,216,140,0.15);
+  --green3:   rgba(52,216,140,0.08);
+  --amber:    #F5B942;
+  --amber2:   rgba(245,185,66,0.15);
+  --red:      #F06262;
+  --red2:     rgba(240,98,98,0.15);
+  --blue:     #6A9EFF;
+  --text:     #EEEEF2;
+  --text2:    #8E8FA0;
+  --text3:    #4A4B58;
+  --border:   rgba(255,255,255,0.07);
+  --border2:  rgba(255,255,255,0.13);
+  --r:        16px;
+  --r-sm:     10px;
+  --safe-bottom: env(safe-area-inset-bottom, 16px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'Sora',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  display:flex;flex-direction:column;
+  overscroll-behavior:none;
+}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav{
+  flex-shrink:0;
+  display:flex;
+  background:var(--bg2);
+  border-top:1px solid var(--border);
+  padding:0 0 var(--safe-bottom);
+  z-index:100;
+  position:relative;
+}
+.nav-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:10px 4px 8px;gap:4px;
+  border:none;background:transparent;color:var(--text2);
+  font-family:'Sora',sans-serif;font-size:10px;font-weight:400;
+  cursor:pointer;transition:color 0.2s;
+  position:relative;
+}
+.nav-btn.active{color:var(--green)}
+.nav-btn .nav-icon{font-size:20px;line-height:1}
+.nav-btn.active::after{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:32px;height:2px;background:var(--green);border-radius:0 0 4px 4px;
+}
+
+/* ── PAGES ── */
+.pages{flex:1;overflow:hidden;position:relative;min-height:0}
+.page{
+  position:absolute;inset:0;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.2s;
+}
+.page.active{opacity:1;pointer-events:auto}
+
+/* ── HEADER STRIP ── */
+.page-header{
+  position:sticky;top:0;z-index:10;
+  background:rgba(12,13,16,0.92);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:14px 16px 12px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.page-title{
+  font-family:'Instrument Serif',serif;
+  font-size:20px;font-weight:400;
+  color:var(--text);
+  display:flex;align-items:center;gap:8px;
+}
+.page-title .flag{font-size:18px}
+
+/* ── HOME PAGE ── */
+.home-hero{
+  padding:24px 16px 16px;
+  background:linear-gradient(180deg, #13141A 0%, #0C0D10 100%);
+  text-align:center;position:relative;overflow:hidden;
+}
+.home-hero::after{
+  content:'';position:absolute;
+  top:-60px;left:50%;transform:translateX(-50%);
+  width:260px;height:260px;
+  background:radial-gradient(circle,rgba(52,216,140,0.09) 0%,transparent 70%);
+  pointer-events:none;
+}
+.home-flag{font-size:52px;display:block;margin-bottom:10px;animation:bob 3s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.home-title{
+  font-family:'Instrument Serif',serif;
+  font-size:28px;font-weight:400;
+  letter-spacing:-0.01em;
+  color:var(--text);margin-bottom:4px;
+}
+.home-title em{color:var(--green);font-style:normal}
+.home-sub{font-size:13px;color:var(--text2);margin-bottom:20px}
+
+/* PROGRESS CARD */
+.prog-card{
+  margin:0 16px 12px;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  padding:16px;
+}
+.prog-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:10px}
+.prog-nums{display:flex;gap:16px}
+.prog-item{text-align:center}
+.prog-n{font-size:24px;font-weight:700;line-height:1}
+.prog-n.g{color:var(--green)}
+.prog-n.a{color:var(--amber)}
+.prog-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-top:2px}
+.prog-track{height:6px;background:var(--bg3);border-radius:99px;overflow:hidden;margin-top:4px}
+.prog-fill{height:6px;background:linear-gradient(90deg,#1ea866,var(--green));border-radius:99px;transition:width 0.6s cubic-bezier(.4,0,.2,1)}
+.prog-hint{font-size:11px;color:var(--text3);text-align:right;margin-top:6px}
+
+/* QUICK STATS */
+.quick-stats{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  margin:0 16px 20px;
+}
+.qs-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  padding:14px;display:flex;align-items:center;gap:10px;
+}
+.qs-icon{font-size:24px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--bg3);border-radius:10px;flex-shrink:0}
+.qs-info{}
+.qs-n{font-size:18px;font-weight:700;color:var(--text)}
+.qs-l{font-size:11px;color:var(--text3);margin-top:1px}
+
+/* TIP CARD */
+.tip-card{
+  margin:0 16px 20px;
+  background:var(--amber2);border:1px solid rgba(245,185,66,0.2);border-radius:var(--r);
+  padding:14px 16px;display:flex;gap:10px;align-items:flex-start;
+}
+.tip-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.tip-text{font-size:12px;color:var(--amber);line-height:1.6}
+.tip-text strong{font-weight:600;display:block;margin-bottom:2px}
+
+/* ── LEARN PAGE ── */
+.search-bar{
+  padding:10px 16px;
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  position:sticky;top:57px;z-index:9;
+}
+.search-inner{
+  position:relative;display:flex;align-items:center;
+}
+.s-icon{position:absolute;left:12px;font-size:14px;color:var(--text3);pointer-events:none}
+.s-input{
+  width:100%;padding:9px 12px 9px 36px;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);
+  color:var(--text);font-size:14px;font-family:'Sora',sans-serif;
+  outline:none;-webkit-appearance:none;
+  transition:border 0.2s;
+}
+.s-input:focus{border-color:var(--green)}
+.s-input::placeholder{color:var(--text3)}
+
+/* FILTER PILLS */
+.filter-row{
+  display:flex;gap:6px;overflow-x:auto;
+  padding:10px 16px;
+  scrollbar-width:none;
+}
+.filter-row::-webkit-scrollbar{display:none}
+.fpill{
+  flex-shrink:0;padding:6px 14px;border-radius:99px;
+  border:1px solid var(--border);background:transparent;
+  color:var(--text2);font-size:12px;font-family:'Sora',sans-serif;
+  cursor:pointer;white-space:nowrap;transition:all 0.15s;
+}
+.fpill.active{background:var(--green2);border-color:rgba(52,216,140,0.4);color:var(--green);font-weight:500}
+.fpill.amber.active{background:var(--amber2);border-color:rgba(245,185,66,0.4);color:var(--amber)}
+
+/* ALPHABET GRID */
+.alph-scroll{padding:12px 16px 100px}
+.alph-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.lbtn{
+  border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:14px 6px 10px;text-align:center;
+  background:var(--card);cursor:pointer;
+  transition:transform 0.1s,border-color 0.15s;
+  position:relative;touch-action:manipulation;
+  -webkit-user-select:none;user-select:none;
+}
+.lbtn:active{transform:scale(0.92)}
+.lbtn.sel{border-color:var(--green);background:var(--green3)}
+.lbtn.done{border-color:rgba(52,216,140,0.35)}
+.lbtn.spc{border-style:dashed}
+.l-char{font-size:22px;font-weight:600;color:var(--text);line-height:1}
+.lbtn.sel .l-char{color:var(--green)}
+.l-snd{font-size:10px;color:var(--text3);margin-top:5px}
+.lbtn.sel .l-snd{color:rgba(52,216,140,0.6)}
+.spc-dot{
+  position:absolute;top:4px;right:4px;
+  width:5px;height:5px;border-radius:50%;background:var(--amber);
+}
+.done-check{
+  position:absolute;top:3px;left:4px;
+  font-size:9px;color:var(--green);font-weight:700;
+}
+
+/* BOTTOM SHEET */
+.sheet-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;
+  opacity:0;pointer-events:none;transition:opacity 0.25s;
+}
+.sheet-overlay.open{opacity:1;pointer-events:auto}
+.sheet{
+  position:fixed;bottom:0;left:0;right:0;z-index:201;
+  background:var(--bg2);border-radius:24px 24px 0 0;
+  border-top:1px solid var(--border);
+  transform:translateY(100%);
+  transition:transform 0.32s cubic-bezier(.32,1,.23,1);
+  max-height:85vh;display:flex;flex-direction:column;
+}
+.sheet.open{transform:translateY(0)}
+.sheet-handle{
+  width:36px;height:4px;background:var(--text3);border-radius:99px;
+  margin:12px auto 8px;flex-shrink:0;
+}
+.sheet-scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 16px 32px;flex:1;min-height:0}
+.sheet-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;padding-top:4px}
+.sheet-big{
+  font-family:'Instrument Serif',serif;
+  font-size:72px;line-height:1;color:var(--green);
+  flex-shrink:0;
+}
+.sheet-right{flex:1;min-width:0;padding-top:6px}
+.sheet-name{font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px}
+.sheet-badge{
+  display:inline-flex;align-items:center;
+  padding:4px 12px;border-radius:99px;
+  font-size:12px;font-weight:600;letter-spacing:0.03em;
+  background:var(--green2);color:var(--green);
+  margin-bottom:8px;
+}
+.sheet-badge.amber{background:var(--amber2);color:var(--amber)}
+.sheet-desc{font-size:13px;color:var(--text2);line-height:1.65}
+.sheet-warn{
+  display:flex;gap:8px;align-items:flex-start;
+  background:var(--amber2);border:1px solid rgba(245,185,66,0.25);
+  border-radius:var(--r-sm);padding:10px 12px;
+  font-size:12px;color:var(--amber);margin-top:10px;line-height:1.5;
+}
+.divider{border:none;border-top:1px solid var(--border);margin:14px 0}
+.ex-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px}
+.ex-list{display:flex;flex-direction:column;gap:7px}
+.ex-item{
+  display:flex;align-items:center;
+  background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:10px 12px;gap:12px;
+}
+.ex-cz{font-size:15px;font-weight:600;color:var(--text);flex:1}
+.ex-cz .hl{color:var(--green)}
+.ex-uz{font-size:12px;color:var(--text3)}
+.sheet-done-btn{
+  width:100%;margin-top:14px;padding:14px;
+  border-radius:var(--r);border:none;
+  font-size:14px;font-family:'Sora',sans-serif;font-weight:600;
+  cursor:pointer;transition:all 0.15s;
+}
+.sheet-done-btn.undone{background:var(--green2);color:var(--green);border:1px solid rgba(52,216,140,0.35)}
+.sheet-done-btn.done2{background:var(--card);color:var(--text2);border:1px solid var(--border)}
+
+/* ── QUIZ PAGE ── */
+.quiz-inner{padding:16px 16px 100px}
+.q-scorerow{display:flex;gap:8px;margin-bottom:16px}
+.q-sc{
+  flex:1;text-align:center;padding:10px 6px;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);
+}
+.q-sc .n{font-size:20px;font-weight:700;line-height:1}
+.q-sc .n.g{color:var(--green)}
+.q-sc .n.r{color:var(--red)}
+.q-sc .l{font-size:10px;color:var(--text3);margin-top:3px;text-transform:uppercase;letter-spacing:0.05em}
+
+.q-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  padding:24px 16px 20px;text-align:center;margin-bottom:14px;
+}
+.q-hint{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px}
+.q-big{
+  font-family:'Instrument Serif',serif;
+  font-size:100px;line-height:1;color:var(--text);margin-bottom:4px;
+}
+.q-sub{font-size:13px;color:var(--text2);margin-bottom:0}
+
+.q-opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.qopt{
+  border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:14px 10px;
+  background:var(--card);color:var(--text);
+  font-family:'Sora',sans-serif;cursor:pointer;
+  text-align:center;transition:all 0.15s;
+  touch-action:manipulation;
+}
+.qopt:active:not(:disabled){transform:scale(0.96)}
+.qopt .o-snd{font-size:18px;font-weight:700;display:block;margin-bottom:3px}
+.qopt .o-nm{font-size:11px;color:var(--text3)}
+.qopt.correct{background:var(--green2)!important;border-color:var(--green)!important;color:var(--green)!important}
+.qopt.correct .o-nm{color:rgba(52,216,140,0.7)!important}
+.qopt.wrong{background:var(--red2)!important;border-color:var(--red)!important;color:var(--red)!important}
+.qopt.wrong .o-nm{color:rgba(240,98,98,0.7)!important}
+
+.q-fb{
+  border-radius:var(--r-sm);padding:12px 14px;
+  font-size:13px;font-weight:500;display:none;
+  margin-bottom:10px;line-height:1.5;
+}
+.q-fb.ok{background:var(--green2);color:var(--green);border:1px solid rgba(52,216,140,0.3)}
+.q-fb.fail{background:var(--red2);color:var(--red);border:1px solid rgba(240,98,98,0.3)}
+.next-btn{
+  width:100%;padding:14px;border-radius:var(--r);
+  border:1px solid var(--green);background:transparent;
+  color:var(--green);font-size:15px;font-family:'Sora',sans-serif;font-weight:600;
+  cursor:pointer;display:none;transition:all 0.15s;
+}
+.next-btn:active{background:var(--green);color:#0C0D10}
+</style>
+</head>
+<body>
+
+<!-- PAGES -->
+<div class="pages">
+
+  <!-- HOME -->
+  <div class="page active" id="page-home">
+    <div class="page-header">
+      <div class="page-title"><span class="flag">🇨🇿</span> Chex Alifbosi</div>
+    </div>
+    <div class="home-hero">
+      <span class="home-flag">🇨🇿</span>
+      <div class="home-title">Chex <em>Alifbosi</em></div>
+      <div class="home-sub">42 harf — talaffuz va misollar bilan</div>
+    </div>
+
+    <div class="prog-card">
+      <div class="prog-row">
+        <div class="prog-nums">
+          <div class="prog-item">
+            <div class="prog-n" id="h-total">42</div>
+            <div class="prog-lbl">Jami</div>
+          </div>
+          <div class="prog-item">
+            <div class="prog-n g" id="h-learned">0</div>
+            <div class="prog-lbl">O'rganildi</div>
+          </div>
+          <div class="prog-item">
+            <div class="prog-n a" id="h-pct">0%</div>
+            <div class="prog-lbl">Natija</div>
+          </div>
+        </div>
+      </div>
+      <div class="prog-track"><div class="prog-fill" id="h-bar" style="width:0%"></div></div>
+      <div class="prog-hint" id="h-hint">0 / 42 harf o'rganildi</div>
+    </div>
+
+    <div class="quick-stats">
+      <div class="qs-card">
+        <div class="qs-icon">🔤</div>
+        <div class="qs-info">
+          <div class="qs-n">26</div>
+          <div class="qs-l">Oddiy harf</div>
+        </div>
+      </div>
+      <div class="qs-card">
+        <div class="qs-icon">⚡</div>
+        <div class="qs-info">
+          <div class="qs-n">16</div>
+          <div class="qs-l">Maxsus harf</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-icon">💡</div>
+      <div class="tip-text">
+        <strong>Biladingizmi?</strong>
+        Ř — faqat chex tilida bor noyob tovush! Dunyo tillarining hech birida yo'q.
+      </div>
+    </div>
+  </div>
+
+  <!-- LEARN -->
+  <div class="page" id="page-learn">
+    <div class="page-header">
+      <div class="page-title">📖 O'rganish</div>
+    </div>
+    <div class="search-bar">
+      <div class="search-inner">
+        <span class="s-icon">🔍</span>
+        <input class="s-input" type="text" id="s-input" placeholder="Harf yoki so'z qidirish..." oninput="renderLearn()">
+      </div>
+    </div>
+    <div class="filter-row" id="filter-row">
+      <button class="fpill active" data-f="all" onclick="setF('all',this)">Barchasi</button>
+      <button class="fpill" data-f="basic" onclick="setF('basic',this)">Oddiy harflar</button>
+      <button class="fpill amber" data-f="special" onclick="setF('special',this)">⚡ Maxsus harflar</button>
+    </div>
+    <div class="alph-scroll">
+      <div class="alph-grid" id="alph-grid"></div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="page" id="page-quiz">
+    <div class="page-header">
+      <div class="page-title">🧠 Test</div>
+    </div>
+    <div class="quiz-inner">
+      <div class="q-scorerow">
+        <div class="q-sc"><div class="n g" id="q-ok">0</div><div class="l">To'g'ri</div></div>
+        <div class="q-sc"><div class="n r" id="q-err">0</div><div class="l">Xato</div></div>
+        <div class="q-sc"><div class="n" id="q-tot">0</div><div class="l">Jami</div></div>
+      </div>
+      <div class="q-card">
+        <div class="q-hint">Bu harf qanday talaffuz qilinadi?</div>
+        <div class="q-big" id="q-big"></div>
+        <div class="q-sub" id="q-sub"></div>
+      </div>
+      <div class="q-opts-grid" id="q-opts"></div>
+      <div class="q-fb" id="q-fb"></div>
+      <button class="next-btn" id="next-btn" onclick="nextQ()">Keyingi harf →</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" id="nav-home" onclick="goPage('home')">
+    <span class="nav-icon">🏠</span>Bosh sahifa
+  </button>
+  <button class="nav-btn" id="nav-learn" onclick="goPage('learn')">
+    <span class="nav-icon">📖</span>O'rganish
+  </button>
+  <button class="nav-btn" id="nav-quiz" onclick="goPage('quiz')">
+    <span class="nav-icon">🧠</span>Test
+  </button>
+</nav>
+
+<!-- BOTTOM SHEET -->
+<div class="sheet-overlay" id="sheet-overlay" onclick="closeSheet()"></div>
+<div class="sheet" id="sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-scroll" id="sheet-body"></div>
+</div>
+
+<script>
+const LETTERS = [
+  {char:"A a",m:"A",sound:"[a]",name:"A",desc:"O'zbek 'a' harfi kabi. Og'iz keng ochiladi.",spc:false,ex:[["ahoj","salom"],["auto","mashina"],["ano","ha"]]},
+  {char:"Á á",m:"Á",sound:"[aː]",name:"A uzun",desc:"'a' harfining cho'zilgan talaffuzi — 'aaa' deb uzun aytiladi.",spc:true,ex:[["dál","davom et"],["stát","davlat"],["já","men"]]},
+  {char:"B b",m:"B",sound:"[b]",name:"Be",desc:"O'zbek 'b' harfi kabi. Lablarni birlashtiring.",spc:false,ex:[["být","bo'lmoq"],["banka","bank"],["bratr","aka"]]},
+  {char:"C c",m:"C",sound:"[ts]",name:"Tse",desc:"'ts' birikmasidek o'qiladi! 'Tsirkus' dagi kabi. Ko'plar yanglishib 's' deb o'qiydi.",spc:true,ex:[["co","nima"],["cena","narx"],["cukr","shakar"]]},
+  {char:"Č č",m:"Č",sound:"[ch]",name:"Che",desc:"O'zbek 'ch' harfi bilan bir xil. 'Choy' so'zidagi 'ch'.",spc:true,ex:[["čaj","choy"],["česky","chexcha"],["čau","xayir"]]},
+  {char:"D d",m:"D",sound:"[d]",name:"De",desc:"O'zbek 'd' harfi kabi.",spc:false,ex:[["den","kun"],["děkuji","rahmat"],["dnes","bugun"]]},
+  {char:"Ď ď",m:"Ď",sound:"[dʲ]",name:"De yumshoq",desc:"Yumshoq 'd' — til tepaga tegib, d+y biriktirib aytiladi.",spc:true,ex:[["ďábel","shayton"],["Maďarsko","Vengriya"],["ďas","kuchli"]]},
+  {char:"E e",m:"E",sound:"[ɛ]",name:"E",desc:"O'zbek 'e' harfi kabi. Ochiq talaffuz.",spc:false,ex:[["euro","evro"],["energie","energiya"],["ego","ego"]]},
+  {char:"É é",m:"É",sound:"[ɛː]",name:"E uzun",desc:"Uzun 'e' tovushi — cho'zilgan talaffuz.",spc:true,ex:[["léto","yoz"],["péct","pishirmoq"],["mléko","sut"]]},
+  {char:"Ě ě",m:"Ě",sound:"[jɛ]",name:"E yumshoq",desc:"'ye' kabi o'qiladi — oldingi undoshni yumshatadi.",spc:true,ex:[["město","shahar"],["věk","yosh"],["tělo","tana"]]},
+  {char:"F f",m:"F",sound:"[f]",name:"Ef",desc:"O'zbek 'f' harfi kabi.",spc:false,ex:[["foto","fotosurat"],["film","film"],["fajn","zo'r"]]},
+  {char:"G g",m:"G",sound:"[g]",name:"Ge",desc:"O'zbek 'g' harfi kabi. Asosan chet so'zlarda.",spc:false,ex:[["gram","gramm"],["golf","golf"],["galerie","galereya"]]},
+  {char:"H h",m:"H",sound:"[ɦ]",name:"Ha",desc:"Yumshoq 'h' — tomoqda hosil bo'ladi, o'zbek 'h'sidan yumshoqroq.",spc:false,ex:[["hotel","mehmonxona"],["hodina","soat"],["hlava","bosh"]]},
+  {char:"Ch ch",m:"Ch",sound:"[x]",name:"X (2 harf, 1 tovush)",desc:"IKKITA harf — lekin bitta tovush! O'zbek 'x' harfi kabi. Alifboda alohida o'rin egallaydi.",spc:true,ex:[["chléb","non"],["chlapec","o'g'il bola"],["chci","xohlayman"]]},
+  {char:"I i",m:"I",sound:"[ɪ]",name:"I",desc:"Qisqa 'i' tovushi.",spc:false,ex:[["inženýr","muhandis"],["informace","ma'lumot"],["internet","internet"]]},
+  {char:"Í í",m:"Í",sound:"[iː]",name:"I uzun",desc:"Uzun 'i' tovushi — cho'zilgan talaffuz.",spc:true,ex:[["líný","dangasa"],["víno","vino"],["přijít","kelmoq"]]},
+  {char:"J j",m:"J",sound:"[j]",name:"Ye",desc:"O'zbek 'y' harfi kabi! 'Yaxshi' so'zidagi 'y'. 'J' deb o'qimang!",spc:true,ex:[["jídlo","taom"],["jít","bormoq"],["jméno","ism"]]},
+  {char:"K k",m:"K",sound:"[k]",name:"Ka",desc:"O'zbek 'k' harfi kabi.",spc:false,ex:[["kde","qayerda"],["káva","qahva"],["kolo","velosiped"]]},
+  {char:"L l",m:"L",sound:"[l]",name:"El",desc:"O'zbek 'l' harfi kabi.",spc:false,ex:[["léto","yoz"],["lístek","chipta"],["levný","arzon"]]},
+  {char:"M m",m:"M",sound:"[m]",name:"Em",desc:"O'zbek 'm' harfi kabi.",spc:false,ex:[["matka","ona"],["město","shahar"],["mléko","sut"]]},
+  {char:"N n",m:"N",sound:"[n]",name:"En",desc:"O'zbek 'n' harfi kabi.",spc:false,ex:[["ne","yo'q"],["nový","yangi"],["nádraží","stansiya"]]},
+  {char:"Ň ň",m:"Ň",sound:"[nʲ]",name:"En yumshoq",desc:"Ispancha 'ñ' kabi — n+y biriktirib aytiladi.",spc:true,ex:[["kůň","ot"],["daň","soliq"],["Španělsko","Ispaniya"]]},
+  {char:"O o",m:"O",sound:"[ɔ]",name:"O",desc:"O'zbek 'o' harfi kabi.",spc:false,ex:[["otec","ota"],["obchod","do'kon"],["auto","mashina"]]},
+  {char:"Ó ó",m:"Ó",sound:"[oː]",name:"O uzun",desc:"Uzun 'o' tovushi. Asosan chet so'zlarda, juda kam uchraydi.",spc:true,ex:[["móda","moda"],["módní","modabop"],["nóbl","nozik"]]},
+  {char:"P p",m:"P",sound:"[p]",name:"Pe",desc:"O'zbek 'p' harfi kabi.",spc:false,ex:[["prosím","iltimos"],["práce","ish"],["pivo","pivo"]]},
+  {char:"R r",m:"R",sound:"[r]",name:"Er",desc:"Titragan 'r' — til uchi tebranadi. O'zbek 'r'sidan kuchliroq.",spc:false,ex:[["restaurace","restoran"],["rýže","guruch"],["ráno","ertalab"]]},
+  {char:"Ř ř",m:"Ř",sound:"[r̝]",name:"Er maxsus",desc:"FAQAT CHEX TILIDA bor noyob tovush! Boshqa hech qaysi tilda yo'q. 'r' va 'zh' biriktirib aytiladi.",spc:true,ex:[["řeka","daryo"],["říct","aytmoq"],["přijít","kelmoq"]]},
+  {char:"S s",m:"S",sound:"[s]",name:"Es",desc:"O'zbek 's' harfi kabi.",spc:false,ex:[["syn","o'g'il"],["sestra","singil"],["zdraví","sog'liq"]]},
+  {char:"Š š",m:"Š",sound:"[sh]",name:"Sha",desc:"O'zbek 'sh' harfi bilan bir xil! 'Shahar' dagi 'sh'.",spc:true,ex:[["šéf","rahbar"],["špatně","yomon"],["škola","maktab"]]},
+  {char:"T t",m:"T",sound:"[t]",name:"Te",desc:"O'zbek 't' harfi kabi.",spc:false,ex:[["tam","u yerda"],["týden","hafta"],["tady","bu yerda"]]},
+  {char:"Ť ť",m:"Ť",sound:"[tʲ]",name:"Te yumshoq",desc:"Yumshoq 't' — t+y biriktirib aytiladi. Juda kam uchraydi.",spc:true,ex:[["ťava","tuya"],["třetí","uchinchi"],["ťuká","taqillamoq"]]},
+  {char:"U u",m:"U",sound:"[ʊ]",name:"U",desc:"O'zbek 'u' harfi kabi, lekin qisqaroq.",spc:false,ex:[["ulice","ko'cha"],["únor","fevral"],["uber","uber"]]},
+  {char:"Ú ú",m:"Ú",sound:"[uː]",name:"U uzun",desc:"Uzun 'u' tovushi — cho'zilgan talaffuz.",spc:true,ex:[["úterý","seshanba"],["únor","fevral"],["účet","hisob"]]},
+  {char:"Ů ů",m:"Ů",sound:"[uː]",name:"U doira",desc:"Ú bilan talaffuzi bir xil! Faqat yozuvda farq bor. Tarixiy sabab.",spc:true,ex:[["dům","uy"],["stůl","stol"],["kůň","ot"]]},
+  {char:"V v",m:"V",sound:"[v]",name:"Ve",desc:"O'zbek 'v' harfi kabi.",spc:false,ex:[["voda","suv"],["víno","vino"],["vlak","poezd"]]},
+  {char:"X x",m:"X",sound:"[ks]",name:"Ix",desc:"'ks' birikmasidek — asosan chet so'zlarda.",spc:false,ex:[["extra","a'lo"],["taxi","taksi"],["Xbox","Xbox"]]},
+  {char:"Y y",m:"Y",sound:"[ɪ]",name:"Ipsilon",desc:"'i' kabi o'qiladi. Grammatikada 'qattiq y' deyiladi.",spc:false,ex:[["ty","sen"],["ryba","baliq"],["být","bo'lmoq"]]},
+  {char:"Ý ý",m:"Ý",sound:"[iː]",name:"Ipsilon uzun",desc:"'í' kabi o'qiladi — uzun 'i' tovushi.",spc:true,ex:[["starý","eski"],["nový","yangi"],["dobrý","yaxshi"]]},
+  {char:"Z z",m:"Z",sound:"[z]",name:"Ze",desc:"O'zbek 'z' harfi kabi.",spc:false,ex:[["záchrana","tez yordam"],["zdraví","sog'liq"],["zítra","ertaga"]]},
+  {char:"Ž ž",m:"Ž",sound:"[ž]",name:"Zha",desc:"Frantsuzcha 'j' kabi — 'Janr' so'zidagi 'j'. Inglizchadagi 'measure'dagi 's'.",spc:true,ex:[["žena","ayol"],["žák","o'quvchi"],["život","hayot"]]},
+];
+
+const learned = new Set(JSON.parse(localStorage.getItem('cz2_al')||'[]'));
+let curFilter = 'all';
+let selIdx = 0;
+let qOk=0, qErr=0, qTot=0, qAns=false;
+
+function save(){try{localStorage.setItem('cz2_al',JSON.stringify([...learned]));}catch(e){}}
+
+function updateStats(){
+  const n=learned.size, tot=LETTERS.length, pct=Math.round(n/tot*100);
+  ['h-learned'].forEach(id=>document.getElementById(id).textContent=n);
+  document.getElementById('h-pct').textContent=pct+'%';
+  document.getElementById('h-bar').style.width=pct+'%';
+  document.getElementById('h-hint').textContent=n+' / '+tot+' harf o\'rganildi';
+}
+
+/* PAGE NAV */
+function goPage(p){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.getElementById('nav-'+p).classList.add('active');
+  if(p==='quiz') nextQ();
+  if(p==='learn') renderLearn();
+}
+
+/* FILTER */
+function setF(f,el){
+  curFilter=f;
+  document.querySelectorAll('.fpill').forEach(e=>e.classList.remove('active'));
+  el.classList.add('active');
+  renderLearn();
+}
+
+/* LEARN GRID */
+function renderLearn(){
+  const q=(document.getElementById('s-input').value||'').trim().toLowerCase();
+  const items=LETTERS.filter((l,i)=>{
+    const fm=curFilter==='all'||(curFilter==='special'&&l.spc)||(curFilter==='basic'&&!l.spc);
+    const sm=!q||(l.char.toLowerCase().includes(q)||l.sound.includes(q)||l.name.toLowerCase().includes(q)||l.ex.some(e=>e[0].toLowerCase().includes(q)||e[1].toLowerCase().includes(q)));
+    return fm&&sm;
+  });
+  const g=document.getElementById('alph-grid');
+  if(!items.length){g.innerHTML='<div style="grid-column:1/-1;padding:40px;text-align:center;color:var(--text3);font-size:13px">Hech narsa topilmadi</div>';return;}
+  g.innerHTML=items.map(l=>{
+    const i=LETTERS.indexOf(l);
+    const done=learned.has(l.m);
+    return`<button class="lbtn${i===selIdx?' sel':''}${done?' done':''}${l.spc?' spc':''}" onclick="openSheet(${i})">
+      ${l.spc?'<span class="spc-dot"></span>':''}
+      ${done?'<span class="done-check">✓</span>':''}
+      <div class="l-char">${l.m}</div>
+      <div class="l-snd">${l.sound}</div>
+    </button>`;
+  }).join('');
+}
+
+/* BOTTOM SHEET */
+function hl(w,c){
+  const p=new RegExp('('+c.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+  return w.replace(p,'<span class="hl">$1</span>');
+}
+
+function openSheet(i){
+  selIdx=i;
+  const l=LETTERS[i];
+  const done=learned.has(l.m);
+  document.getElementById('sheet-body').innerHTML=`
+    <div class="sheet-head">
+      <div class="sheet-big">${l.char.split(' ')[0]}</div>
+      <div class="sheet-right">
+        <div class="sheet-name">${l.name}</div>
+        <span class="sheet-badge${l.spc?' amber':''}">${l.sound}</span>
+        <div class="sheet-desc">${l.desc}</div>
+        ${l.spc?'<div class="sheet-warn">⚡ Bu harf o\'zbekchada yo\'q — maxsus e\'tibor bering!</div>':''}
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="ex-label">Misollar</div>
+    <div class="ex-list">${l.ex.map(e=>`<div class="ex-item"><div class="ex-cz">${hl(e[0],l.m.toLowerCase())}</div><div class="ex-uz">${e[1]}</div></div>`).join('')}</div>
+    <button class="sheet-done-btn ${done?'done2':'undone'}" onclick="toggleDone('${l.m}')">${done?'✓ O\'rganildi — bekor qilish':'✅ O\'rganildi deb belgilash'}</button>
+  `;
+  document.getElementById('sheet-overlay').classList.add('open');
+  document.getElementById('sheet').classList.add('open');
+  renderLearn();
+}
+
+function closeSheet(){
+  document.getElementById('sheet-overlay').classList.remove('open');
+  document.getElementById('sheet').classList.remove('open');
+}
+
+function toggleDone(char){
+  if(learned.has(char)) learned.delete(char);
+  else learned.add(char);
+  save(); updateStats();
+  openSheet(selIdx);
+  renderLearn();
+}
+
+/* QUIZ */
+function shuffle(a){return[...a].sort(()=>Math.random()-0.5)}
+function nextQ(){
+  qAns=false;
+  document.getElementById('next-btn').style.display='none';
+  document.getElementById('q-fb').style.display='none';
+  const idx=Math.floor(Math.random()*LETTERS.length);
+  const c=LETTERS[idx];
+  const wrongs=shuffle(LETTERS.filter((_,i)=>i!==idx)).slice(0,3);
+  const opts=shuffle([c,...wrongs]);
+  document.getElementById('q-big').textContent=c.char.split(' ')[0];
+  document.getElementById('q-sub').textContent=c.name;
+  document.getElementById('q-opts').innerHTML=opts.map(o=>`
+    <button class="qopt" onclick="checkQ(this,'${o.m}','${c.m}','${c.sound.replace(/'/g,"\\'")}','${c.name.replace(/'/g,"\\'")}')">
+      <span class="o-snd">${o.sound}</span>
+      <span class="o-nm">${o.name}</span>
+    </button>`).join('');
+}
+
+function checkQ(btn,chosen,correct,correctSnd,correctName){
+  if(qAns) return;
+  qAns=true; qTot++;
+  document.querySelectorAll('.qopt').forEach(b=>b.disabled=true);
+  document.querySelectorAll('.qopt').forEach(b=>{
+    if(b.querySelector('.o-nm').textContent===correctName) b.classList.add('correct');
+  });
+  const fb=document.getElementById('q-fb');
+  if(chosen===correct){
+    qOk++; btn.classList.add('correct');
+    fb.textContent='✓ To\'g\'ri! Ajoyib!';
+    fb.className='q-fb ok'; fb.style.display='block';
+  } else {
+    qErr++; btn.classList.add('wrong');
+    fb.textContent='✗ Xato. To\'g\'ri javob: '+correctSnd+' ('+correctName+')';
+    fb.className='q-fb fail'; fb.style.display='block';
+  }
+  document.getElementById('q-ok').textContent=qOk;
+  document.getElementById('q-err').textContent=qErr;
+  document.getElementById('q-tot').textContent=qTot;
+  document.getElementById('next-btn').style.display='block';
+}
+
+/* SWIPE TO CLOSE SHEET */
+let ts=0;
+document.getElementById('sheet').addEventListener('touchstart',e=>{ts=e.touches[0].clientY},{passive:true});
+document.getElementById('sheet').addEventListener('touchend',e=>{
+  if(e.changedTouches[0].clientY-ts>60) closeSheet();
+},{passive:true});
+
+renderLearn();
+updateStats();
+nextQ();
+</script>
+</body>
+</html>
